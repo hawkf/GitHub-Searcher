@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { Repository } from "../type-const";
 import { createApi } from "../services/api";
 import { findSubstring } from "../utils";
+import swal from "sweetalert";
 
 const api = createApi();
 
@@ -14,10 +15,13 @@ export const RepositoriesList: React.FC<{ login: string }> = (props) => {
   const { login } = props;
 
   useEffect(() => {
-    api.get(`${login}/repos`).then((response) => {
-      setRepositories(response.data.slice());
-      setFilteredRepositories(response.data.slice());
-    });
+    api
+      .get(`${login}/repos`)
+      .then((response) => {
+        setRepositories(response.data.slice());
+        setFilteredRepositories(response.data.slice());
+      })
+      .catch(() => swal("Произошла ошибка во время получения данных"));
   }, [login]);
 
   const onInputHandler = (): void => {

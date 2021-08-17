@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import { createApi } from "../services/api";
 import { User } from "../type-const";
+import swal from "sweetalert";
 
 const api = createApi();
 
@@ -10,10 +11,13 @@ export const SearchForm: React.FC<{ onChangeHandler(user: User): void }> = (
   const inputRef = useRef<HTMLInputElement>(null);
 
   const onInputHanldler = (): void => {
-    api.get(inputRef.current!.value).then((response) => {
-      console.log(response.data);
-      props.onChangeHandler(response.data);
-    });
+    api
+      .get(inputRef.current!.value)
+      .then((response) => {
+        console.log(response.data);
+        props.onChangeHandler(response.data);
+      })
+      .catch(() => swal("Произошла ошибка во время получения данных"));
   };
 
   return (

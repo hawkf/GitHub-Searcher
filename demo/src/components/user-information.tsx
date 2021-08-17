@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { createApi } from "../services/api";
 import { UserFeatures } from "./user-features";
 import { RepositoriesList } from "./repositories-list";
+import swal from "sweetalert";
 
 const api = createApi();
 
@@ -12,9 +13,12 @@ export const UserInformation: React.FC = () => {
   const { userLogin } = useParams<{ userLogin?: string }>();
 
   useEffect(() => {
-    api.get(userLogin!).then((response) => {
-      setCurrentUser(response.data);
-    });
+    api
+      .get(userLogin!)
+      .then((response) => {
+        setCurrentUser(response.data);
+      })
+      .catch(() => swal("Произошла ошибка во время получения данных"));
   }, [userLogin]);
 
   if (currentUser === null) {
