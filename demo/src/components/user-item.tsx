@@ -17,7 +17,7 @@ export const UserItem: React.FC<{ user: User }> = (props) => {
         src={user.avatar_url}
         width='60'
         height='60'
-        alt='users-photo'
+        alt='user'
       />
       <p className='users-list__item-user-name'>{user.name}</p>
       <p className='users-list__item-repo-number'>{`Repo: ${user.public_repos}`}</p>

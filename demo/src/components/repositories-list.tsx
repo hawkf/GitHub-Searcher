@@ -2,13 +2,14 @@ import { useEffect, useState, useRef } from "react";
 import { Repository } from "../type-const";
 import { createApi } from "../services/api";
 import { findSubstring } from "../utils";
-import { Redirect } from "react-router";
 
 const api = createApi();
 
 export const RepositoriesList: React.FC<{ login: string }> = (props) => {
-  const [repositories, setRepositories] = useState([]);
-  const [filteredRepositories, setFilteredRepositories] = useState([]);
+  const [repositories, setRepositories] = useState([] as Repository[]);
+  const [filteredRepositories, setFilteredRepositories] = useState(
+    [] as Repository[]
+  );
   const inputText = useRef<HTMLInputElement>(null);
   const { login } = props;
 

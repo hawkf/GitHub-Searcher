@@ -1,5 +1,4 @@
-import { useState, useRef } from "react";
-import { throwStatement } from "@babel/types";
+import { useRef } from "react";
 import { createApi } from "../services/api";
 import { User } from "../type-const";
 
@@ -8,8 +7,6 @@ const api = createApi();
 export const SearchForm: React.FC<{ onChangeHandler(user: User): void }> = (
   props
 ) => {
-  const [inputText, setInputTex] = useState("");
-
   const inputRef = useRef<HTMLInputElement>(null);
 
   const onInputHanldler = (): void => {

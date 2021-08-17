@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { SearchForm } from "./search-form";
 import { UserItem } from "./user-item";
 import { User } from "../type-const";
@@ -7,12 +6,11 @@ export interface Props {
   user: User;
 }
 
-export const MainPage: React.FC = () => {
-  const [users, setUsers] = useState([] as User[]);
-
-  const onChangeHandler = (user: User): void => {
-    setUsers([...users, user]);
-  };
+export const MainPage: React.FC<{
+  users: User[];
+  onChangeHandler(user: User): void;
+}> = (props) => {
+  const { users, onChangeHandler } = props;
 
   return (
     <>

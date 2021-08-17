@@ -3,7 +3,8 @@ import { User, Repository } from '../type-const';
 
 const initialState = {
   users:[] ,
-  repos: []  
+  repos: [],
+
 };
 
 function reducer (state = initialState, action: {type: string; payload: User[] | Repository[]}) {

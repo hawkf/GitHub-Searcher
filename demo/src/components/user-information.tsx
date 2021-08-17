@@ -2,15 +2,12 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { createApi } from "../services/api";
 import { UserFeatures } from "./user-features";
-import { Repository } from "../type-const";
 import { RepositoriesList } from "./repositories-list";
 
 const api = createApi();
 
 export const UserInformation: React.FC = () => {
   const [currentUser, setCurrentUser] = useState(null);
-  //const [repositories, setRepositories] = useState(null);
-  //let repositories: Repository[];
 
   const { userLogin } = useParams<{ userLogin?: string }>();
 
