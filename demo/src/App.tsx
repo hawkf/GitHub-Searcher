@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
-import { MainPage } from "./main-page";
-import { UserInformation } from "./user-information";
-import { AppRoute } from "../const";
-import { User } from "../type-const";
-import "../css/App.css";
+import { MainPage } from "./components/main-page";
+import { UserInformation } from "./components/user-information";
+import { AppRoute } from "./const";
+import { User } from "./type-const";
+import "./css/App.css";
 
 const App: React.FC = () => {
   const [users, setUsers] = useState([] as User[]);
