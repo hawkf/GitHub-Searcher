@@ -21,7 +21,7 @@ export const MainPage: React.FC<{
         <SearchForm onChangeHandler={(user: User) => onChangeHandler(user)} />
         <ul className='users-list'>
           {users.map((item) => {
-            return <UserItem user={item} />;
+            return <UserItem user={item} key={item.login} />;
           })}
         </ul>
       </main>

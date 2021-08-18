@@ -55,6 +55,7 @@ export const RepositoriesList: React.FC<{ login: string }> = (props) => {
               <li
                 onClick={() => onItemClickHandler(item.html_url)}
                 className='repos-list__item'
+                key={item.name}
               >
                 <p className='repos-list__repo-name'>{item.name}</p>
                 <div className='repos-list__detail-information'>

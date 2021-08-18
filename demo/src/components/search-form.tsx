@@ -1,7 +1,6 @@
 import { useRef } from "react";
 import { createApi } from "../services/api";
 import { User } from "../type-const";
-import swal from "sweetalert";
 
 const api = createApi();
 
@@ -17,7 +16,7 @@ export const SearchForm: React.FC<{ onChangeHandler(user: User): void }> = (
         console.log(response.data);
         props.onChangeHandler(response.data);
       })
-      .catch(() => swal("Произошла ошибка во время получения данных"));
+      .catch(() => console.log("Пользователь не найден"));
   };
 
   return (
