@@ -3,9 +3,6 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { createApi } from "./services/api";
-
-const api = createApi();
 
 ReactDOM.render(
   <React.StrictMode>
