@@ -8,9 +8,16 @@ export interface Props {
 
 export const MainPage: React.FC<{
   users: User[];
-  onChangeHandler(user: User): void;
+  onChangeHandler(users: User[]): void;
+  inputSearchValue: string;
+  changeInputSearchValueHandler(searchText: string): void;
 }> = (props) => {
-  const { users, onChangeHandler } = props;
+  const {
+    users,
+    onChangeHandler,
+    inputSearchValue,
+    changeInputSearchValueHandler,
+  } = props;
 
   return (
     <>
@@ -18,7 +25,13 @@ export const MainPage: React.FC<{
         <h1 className='page-header__title'>GitHub Searcher</h1>
       </header>
       <main className='main-container'>
-        <SearchForm onChangeHandler={(user: User) => onChangeHandler(user)} />
+        <SearchForm
+          onChangeHandler={(users: User[]) => onChangeHandler(users)}
+          inputSearchValue={inputSearchValue}
+          changeInputSearchValueHandler={(searchText: string): void =>
+            changeInputSearchValueHandler(searchText)
+          }
+        />
         <ul className='users-list'>
           {users.map((item) => {
             return <UserItem user={item} key={item.login} />;

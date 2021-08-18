@@ -6,11 +6,17 @@ import { AppRoute } from "./const";
 import { User } from "./type-const";
 import "./css/App.css";
 
+let inputSearchValue = "";
+
+const changeInputSearchValueHandler = (serchText: string) => {
+  inputSearchValue = serchText;
+};
+
 const App: React.FC = () => {
   const [users, setUsers] = useState([] as User[]);
 
-  const onChangeHandler = (user: User): void => {
-    setUsers([...users, user]);
+  const onChangeHandler = (users: User[]): void => {
+    setUsers(users);
   };
 
   return (
@@ -19,7 +25,11 @@ const App: React.FC = () => {
         <Route exact path={AppRoute.ROOT}>
           <MainPage
             users={users}
-            onChangeHandler={(user: User) => onChangeHandler(user)}
+            onChangeHandler={(users: User[]) => onChangeHandler(users)}
+            inputSearchValue={inputSearchValue}
+            changeInputSearchValueHandler={(searchText: string): void =>
+              changeInputSearchValueHandler(searchText)
+            }
           />
         </Route>
         <Route exact path={AppRoute.USER}>

@@ -1,29 +1,39 @@
-import { useRef } from "react";
-import { createApi } from "../services/api";
+import React, { useState } from "react";
 import { User } from "../type-const";
+import axios from "axios";
 
-const api = createApi();
+export const SearchForm: React.FC<{
+  onChangeHandler(users: User[]): void;
+  inputSearchValue: string;
+  changeInputSearchValueHandler(searchText: string): void;
+}> = (props) => {
+  const { onChangeHandler, inputSearchValue, changeInputSearchValueHandler } =
+    props;
+  const [inputValue, setInputValue] = useState(inputSearchValue);
 
-export const SearchForm: React.FC<{ onChangeHandler(user: User): void }> = (
-  props
-) => {
-  const inputRef = useRef<HTMLInputElement>(null);
+  const onInputHanldler = (evt: React.FormEvent<HTMLInputElement>): void => {
+    setInputValue(evt.currentTarget.value);
+    changeInputSearchValueHandler(evt.currentTarget.value);
 
-  const onInputHanldler = (): void => {
-    api
-      .get(inputRef.current!.value)
-      .then((response) => {
-        console.log(response.data);
-        props.onChangeHandler(response.data);
-      })
-      .catch(() => console.log("Пользователь не найден"));
+    if (evt.currentTarget.value.trim().length > 0) {
+      axios
+        .get("https://api.github.com/search/users", {
+          params: {
+            q: evt.currentTarget.value,
+          },
+        })
+        .then((response) => {
+          onChangeHandler(response.data.items.slice());
+        })
+        .catch(() => console.log("Пользователь не найден"));
+    }
   };
 
   return (
     <form className='search-form'>
       <input
-        ref={inputRef}
-        onChange={onInputHanldler}
+        value={inputValue}
+        onChange={(evt) => onInputHanldler(evt)}
         className='search-form__input'
         placeholder='Search for Users'
         type='text'
