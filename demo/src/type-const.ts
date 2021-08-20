@@ -7,7 +7,7 @@ export interface User {
   location: string,
   created_at: string,
   followers: string,
-  following: string
+  following: string  
 }
 
 export interface Repository {
@@ -15,4 +15,7 @@ export interface Repository {
   forks_count: number,
   stargazers_count: number,
   html_url: string,
+  owner: {
+    login: string
+  }
 }

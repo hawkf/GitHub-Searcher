@@ -1,6 +1,7 @@
 import { SearchForm } from "./search-form";
 import { UserItem } from "./user-item";
 import { User } from "../type-const";
+import { Repository } from "../type-const";
 
 export interface Props {
   user: User;
@@ -11,12 +12,14 @@ export const MainPage: React.FC<{
   onChangeHandler(users: User[]): void;
   inputSearchValue: string;
   changeInputSearchValueHandler(searchText: string): void;
+  repos: Repository[];
 }> = (props) => {
   const {
     users,
     onChangeHandler,
     inputSearchValue,
     changeInputSearchValueHandler,
+    repos,
   } = props;
 
   return (
@@ -34,7 +37,17 @@ export const MainPage: React.FC<{
         />
         <ul className='users-list'>
           {users.map((item) => {
-            return <UserItem user={item} key={item.login} />;
+            const reposItems = repos.filter((repo) => {
+              return repo.owner.login === item.login;
+            });
+
+            return (
+              <UserItem
+                user={item}
+                key={item.login}
+                reposCount={reposItems.length}
+              />
+            );
           })}
         </ul>
       </main>
