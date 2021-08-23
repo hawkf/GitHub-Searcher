@@ -2,6 +2,11 @@ import { User } from "../type-const";
 
 export const UserFeatures: React.FC<{ user: User }> = (props) => {
   const { user } = props;
+
+  if (user === null) {
+    return null;
+  }
+
   const {
     name,
     avatar_url,

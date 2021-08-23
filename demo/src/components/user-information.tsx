@@ -1,29 +1,24 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { createApi } from "../services/api";
 import { UserFeatures } from "./user-features";
 import { RepositoriesList } from "./repositories-list";
-import swal from "sweetalert";
+import { User } from "../type-const";
 
-const api = createApi();
-
-export const UserInformation: React.FC = () => {
-  const [currentUser, setCurrentUser] = useState(null);
+export const UserInformation: React.FC<{ users: User[] }> = (props) => {
+  const [currentUser, setCurrentUser] = useState(
+    null as null | User | undefined
+  );
+  const { users } = props;
 
   const { userLogin } = useParams<{ userLogin?: string }>();
 
   useEffect(() => {
-    api
-      .get(userLogin!)
-      .then((response) => {
-        setCurrentUser(response.data);
+    setCurrentUser(
+      users.find((item: User) => {
+        return item.login === userLogin;
       })
-      .catch(() => swal("Произошла ошибка во время получения данных"));
-  }, [userLogin]);
-
-  if (currentUser === null) {
-    return <p>Loading</p>;
-  }
+    );
+  }, [userLogin, users]);
 
   return (
     <>

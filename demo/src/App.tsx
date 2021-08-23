@@ -6,58 +6,53 @@ import { AppRoute } from "./const";
 import { User } from "./type-const";
 import "./css/App.css";
 import axios from "axios";
-import { Repository } from "./type-const";
+import swal from "sweetalert";
 
-let inputSearchValue = "";
-
-const changeInputSearchValueHandler = (serchText: string) => {
-  inputSearchValue = serchText;
-};
+const USERS_COUNT = "2";
 
 const App: React.FC = () => {
   const [users, setUsers] = useState([] as User[]);
-  const [repos, setRepos] = useState([] as Repository[] | []);
+  const [inputSearchValue, setInputSearchValue] = useState("");
 
   const onChangeHandler = (users: User[]): void => {
     setUsers(users);
   };
 
-  const usersList = users
-    .map((item) => {
-      return `user:${item.login}`;
-    })
-    .join(" ");
+  const changeInputSearchValueHandler = (searchText: string) => {
+    setInputSearchValue(searchText);
+  };
 
   useEffect(() => {
-    const queryString = encodeURIComponent(usersList);
-    if (usersList.length > 0) {
-      let pageCount: number;
-      let totalCount: number = 0;
-      axios
-        .get(
-          `https://api.github.com/search/repositories?q=${queryString}&per_page=${100}&page=${1}`
-        )
-        .then((response) => {
-          totalCount = response.data.total_count;
-          setRepos(response.data.items.slice());
-          pageCount = Math.trunc(totalCount / 100);
+    let serchedUsers: User[] | [] = [];
+    let resultUsers: User[] = [];
 
-          for (let i = 2; i <= pageCount! + 1; i++) {
-            axios
-              .get(
-                `https://api.github.com/search/repositories?q=${queryString}&per_page=${100}&page=${i}`
-              )
-              .then((response) => {
-                setRepos(repos!.concat(response.data.items.slice()));
-                console.log(repos);
-              });
-          }
-        })
-        .catch((response) => {
-          console.log(response.data);
-        });
+    if (inputSearchValue.length <= 3) {
+      setUsers([]);
     }
-  }, [users]);
+
+    if (inputSearchValue.length > 3) {
+      axios
+        .get("https://api.github.com/search/users", {
+          params: {
+            q: inputSearchValue,
+            per_page: USERS_COUNT,
+          },
+        })
+        .then((response) => {
+          serchedUsers = response.data.items.slice();
+          serchedUsers.forEach((item) => {
+            axios
+              .get(`https://api.github.com/users/${item.login}`)
+              .then((response) => {
+                resultUsers.push(response.data);
+                setUsers(resultUsers.slice());
+              })
+              .catch(() => swal("Произошла ошибка во время получения данных"));
+          });
+        })
+        .catch(() => console.log("Пользователь не найден"));
+    }
+  }, [inputSearchValue]);
 
   return (
     <BrowserRouter>
@@ -70,11 +65,10 @@ const App: React.FC = () => {
             changeInputSearchValueHandler={(searchText: string): void =>
               changeInputSearchValueHandler(searchText)
             }
-            repos={repos}
           />
         </Route>
         <Route exact path={AppRoute.USER}>
-          <UserInformation />
+          <UserInformation users={users} />
         </Route>
       </Switch>
     </BrowserRouter>

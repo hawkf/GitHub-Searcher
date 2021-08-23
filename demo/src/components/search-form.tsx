@@ -1,33 +1,26 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { User } from "../type-const";
-import axios from "axios";
+import { useDebounce } from "../hooks/useDebounce";
+
+const INPUT_DELAY = 500;
 
 export const SearchForm: React.FC<{
   onChangeHandler(users: User[]): void;
   inputSearchValue: string;
   changeInputSearchValueHandler(searchText: string): void;
 }> = (props) => {
-  const { onChangeHandler, inputSearchValue, changeInputSearchValueHandler } =
-    props;
+  const { inputSearchValue, changeInputSearchValueHandler } = props;
   const [inputValue, setInputValue] = useState(inputSearchValue);
 
   const onInputHanldler = (evt: React.FormEvent<HTMLInputElement>): void => {
-    setInputValue(evt.currentTarget.value);
-    changeInputSearchValueHandler(evt.currentTarget.value);
-
-    if (evt.currentTarget.value.trim().length > 0) {
-      axios
-        .get("https://api.github.com/search/users", {
-          params: {
-            q: evt.currentTarget.value,
-          },
-        })
-        .then((response) => {
-          onChangeHandler(response.data.items.slice());
-        })
-        .catch(() => console.log("Пользователь не найден"));
-    }
+    setInputValue(evt.currentTarget.value.trim());
   };
+
+  const debauncedInputValue = useDebounce(inputValue, INPUT_DELAY);
+
+  useEffect(() => {
+    changeInputSearchValueHandler(debauncedInputValue);
+  }, [debauncedInputValue, changeInputSearchValueHandler]);
 
   return (
     <form className='search-form'>
